@@ -58,10 +58,63 @@ Before you begin, ensure you have the following:
 
 ## Usage
 
-To start the bot, run the following command in your terminal from the project's root directory:
+### Running Locally
+
+To start the bot locally, run the following command in your terminal from the project's root directory:
 
 ```bash
 npm start
 ```
+
+### Running with Docker
+
+You can also run the bot using Docker, which provides a consistent environment regardless of your local setup.
+
+1.  **Build the Docker image:**
+
+    ```bash
+    docker build -t discord-website-checker .
+    ```
+
+2.  **Run the container:**
+
+    ```bash
+    docker run -d --name website-checker \
+      -e DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN \
+      -e CHANNEL_ID=YOUR_DISCORD_CHANNEL_ID \
+      -v $(pwd)/WEBSITE.txt:/usr/src/app/WEBSITE.txt \
+      discord-website-checker
+    ```
+
+    **Note:** Replace `YOUR_DISCORD_BOT_TOKEN` and `YOUR_DISCORD_CHANNEL_ID` with your actual values.
+
+3.  **Alternative: Using docker-compose (recommended):**
+
+    Create a `docker-compose.yml` file in the project root:
+
+    ```yaml
+    version: '3.8'
+    services:
+      discord-bot:
+        build: .
+        environment:
+          - DISCORD_TOKEN=${DISCORD_TOKEN}
+          - CHANNEL_ID=${CHANNEL_ID}
+        volumes:
+          - ./WEBSITE.txt:/usr/src/app/WEBSITE.txt
+        restart: unless-stopped
+    ```
+
+    Then run:
+
+    ```bash
+    docker-compose up -d
+    ```
+
+4.  **Managing the Docker container:**
+
+    - **View logs:** `docker logs website-checker`
+    - **Stop the container:** `docker stop website-checker`
+    - **Remove the container:** `docker rm website-checker`
 
 The bot will then connect to Discord and begin monitoring the websites listed in `WEBSITE.txt`.
