@@ -26,7 +26,7 @@ async function checkWebsites() {
 
     for (const website of websites) {
         try {
-            await axios.get(website);
+            await axios.get(website, { timeout: 30000 });
             if (websiteStatus[website] === 'down') {
                 channel.send(`${website} is back up!`);
                 console.log(`[${currentTime}] ${website} is back up!`);
